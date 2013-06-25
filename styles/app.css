@@ -1,0 +1,10 @@
+.aiChart{
+	height: 400px; 
+	width: 400px;
+}
+#aiGaugeChart { 
+	display: none;
+	height: 300px;
+	border: none;
+	background: rgba(255, 255, 255, 0.9);
+}
