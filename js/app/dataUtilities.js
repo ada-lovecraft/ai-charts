@@ -1,7 +1,7 @@
 /*************************
 Data Utilities
 *************************/
-define(['fixtures/chartData'], function(chartData){
+define(['fixtures/chartData','fixtures/trendData'], function(chartData){
 	var self = this;
 	this.chartData = chartData;
 	return {

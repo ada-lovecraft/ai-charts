@@ -1,10 +1,9 @@
 /*************************
 Range Selection Chart 
 *************************/
-define(['app/dataUtilities','app/colorUtilities','dx.chartjs.debug'], function(dataUtils,color) {
+define(['app/dataUtilities','app/colorUtilities','dx.chartjs.debug','fixtures/trendData'], function(dataUtils,color) {
 	return {
 		show: function($rangeEl) {
-			var chartData = dataUtils.getRangeDataByIndex();
 			$("#rangeSelectorContainer").dxRangeSelector({
    	 			scale: {
         			startValue: new Date(chartData[0].month),
@@ -22,7 +21,7 @@ define(['app/dataUtilities','app/colorUtilities','dx.chartjs.debug'], function(d
 			        var zoomedChart = $rangeEl.dxChart('instance');
 			        zoomedChart.zoomArgument(e.startValue, e.endValue);
 			    },       
-    			dataSource: chartData,
+    			dataSource: trendData,
     			chart: {
     				commonSeriesSettings: {
 		               //setup default series options

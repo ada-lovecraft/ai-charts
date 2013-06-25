@@ -1,23 +1,56 @@
 /*************************
 Pie Chart 
 *************************/
-define(['app/dataUtilities','app/colorUtilities','dx.chartjs.debug'], function(dataUtils,color) {
+define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','dx.chartjs.debug'], function(dataUtils,color,trendData) {
    return {
-      show: function($el, startIndex,endIndex) {
-         //define the area chart
-         var chartData = dataUtils.getRangeDataByIndex(startIndex, endIndex);
+
+
+      show: function($el) {
+         //define series from trendData
+         var series = [];
          
+         trendData.plan.subs.forEach(function(sub) {
+            series.push({
+               valueField: sub, 
+               name:sub, 
+               data: trendData.plan.series, 
+               type:'splinearea', 
+               border:{
+                  visible: false
+               },
+               point: {
+                  visible: false
+               }
+            });
+         }); 
+
+         trendData.actual.subs.forEach(function(sub) {
+            var seriesObj = {};
+            series.push({
+               valueField: sub, 
+               name:sub, 
+               data: trendData.actual.series, 
+               type: 'line',
+               point: {
+                  visible: false
+               }
+            });
+         }); 
+
+         
+
+
+         //define the area chart
          $el.dxChart({
             size: {
                width: 800,
                height: 400
             },
-            dataSource: chartData,
 
             commonSeriesSettings: {
                //setup default series options
-               argumentField: 'month',
-               type: 'splinearea',
+               argumentField: 'date',
+               type: 'line',
                border: {
                   color: color.rgbToString(color.palette.darkGrey),
                   width: 2,
@@ -38,28 +71,7 @@ define(['app/dataUtilities','app/colorUtilities','dx.chartjs.debug'], function(d
 
             },
             //define our series data
-            series: [
-               {
-                  valueField: 'actual',
-                  name:'Actual',
-                  color: color.rgbToString(color.palette.orange),
-                  border: {
-                     color: color.rgbToString(color.palette.orange),
-                  },
-               },
-               {
-                  //change this data to a spline series instead of an area series
-                  type: 'spline',
-                  valueField: 'plan',
-                  name:'Planned',
-                  color: color.rgbToString(color.palette.green),
-                  border: {
-                     color: color.rgbToString(color.palette.green),
-                  },
-               },
-
-            ],
-
+            series: series,
             legend: {
                verticalAlignment: 'bottom',
                horizontalAlignment: 'center'
