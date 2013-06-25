@@ -984,8 +984,8 @@ define(function() {
 	});
 
 	dateList.forEach(function(date) {
-		var actualObj = {date: date};
-		var planObj = { date: date };
+		var actualObj = {date: new Date(date)};
+		var planObj = { date: new Date(date) };
 		subList.forEach(function(sub) {			
 			data.forEach(function(data) {
 				if(data.Date == date && data.ContractorCode == sub) {
