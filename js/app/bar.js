@@ -32,7 +32,7 @@ define(['fixtures/chartData','app/colorUtilities','dx.chartjs.debug'], function(
                   tooltip: {
                      enabled: true
                   },
-                  color: color.rgbToString(color.palette.orange)
+                  color: color.rgbToString(color.getUIColor('orange'));
                },
                { 
                   valueField: 'plan', 
@@ -44,7 +44,7 @@ define(['fixtures/chartData','app/colorUtilities','dx.chartjs.debug'], function(
                   tooltip: {
                      enabled: true
                   },
-                  color: color.rgbToString(color.palette.green)
+                  color: color.rgbToString(color.getUIColor('green'));
 
                }
             ],

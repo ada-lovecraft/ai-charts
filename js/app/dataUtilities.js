@@ -1,57 +1,49 @@
 /*************************
 Data Utilities
 *************************/
-define(['fixtures/chartData','fixtures/trendData'], function(chartData){
+define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendData){
 	var self = this;
-	this.chartData = chartData;
 	return {
-		//Data lookup from the summary object
-		getSummaryByContractorName: function(contractorName) {
-			var summary = null;
-			chartData.summary.forEach(function(element, index, array) {
-				if (element.contractorName == contractorName) {
-					summary =  element;
+		getMonthShortNameByDate: function(date) {
+			var aDate = new Date(date);
+			return constants.shortMonthNames[aDate.getMonth()];
+		},
+		getMonthNameByDate: function(date) {
+			return constants.monthNames[date.getMonth()];
+		},
+		getActualSeriesDataByDate: function(date) {
+			var data = [];
+			trendData.actual.series.forEach(function(el) {
+				if(el.date == date) {
+					data = el;
 				}
 			});
-			return summary;
-		},
-
-
-		//Clean the chart TREND data to be an actual json object
-		clean:function () {
-			var newData = [];
-			var categories = self.chartData.trend.categories;
-			var actuals = self.chartData.trend.actual;
-			var plans = self.chartData.trend.plan;
-			//NOTE: I changed "categories" from the original data to MONTH for more 
-			//coherent development
-			categories.forEach(function(el,index,array) {
-				newData.push({month: new Date(categories[index]), actual: actuals[index], plan: plans[index]});
-			});
-			data = newData;
 			return data;
 		},
-		cleanTrend: function() {
-			
-		},
-		getRangeDataByIndex: function(start, end) {
-			var rangeData = [];
-			if (start && end) {
-				var data = this.clean()
-				for(var i = start; i <= end; i++) {
-					rangeData.push(data[i]);
+		getPlanSeriesDataByDate: function(date) {
+			var data = [];
+			trendData.plan.forEach(function(el) {
+				if(el.date == date) {
+					data = el;
 				}
-			} else {
-				rangeData = this.clean();
-			}
-			return rangeData;
+			});
+			return data;
 		},
-		getRangeDataByDates: function(start, end) {
-			var rangeData = [];
-			for(var i = start; i <= end; i++) {
-				rangeData.push(data[i]);
+		translatePointsForTooltip: function(points, primarySub) {
+			var data = [];
+			for(var prop in points) {
+				if (prop != 'date' && prop != 'dateObj') {
+					var pointObj ={};
+					pointObj.sub = prop;
+					pointObj.value = '$' + (points[prop]/1000000).toFixed(2) + 'MM';
+					if (primarySub && prop == primarySub) {
+						data.unshift(pointObj)
+					}
+					else
+						data.push(pointObj);
+				}
 			}
-			return rangeData;
+			return data;
 		}
 	}
 });

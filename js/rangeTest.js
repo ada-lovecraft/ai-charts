@@ -15,15 +15,16 @@ requirejs.config({
     },
     shim: {
     	"jquery-ui": ['jquery'],
-    	"jquery.nouislider.min":['jquery']
+    	"jquery.nouislider.min":['jquery'],
+        "chosen.jquery.min":['jquery']
     }
 });
 
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities', 'jquery-ui','jquery.nouislider.min'],
-function   ($,ko,globalize,chartData,trends,range,dataUtils) {    
+requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities', 'jquery-ui','jquery.nouislider.min','chosen.jquery.min'],
+function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils) {    
     trends.show($('#aiRangeChart'));
     range.show($('#aiRangeChart'));
 });

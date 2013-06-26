@@ -4,7 +4,6 @@ Range Selection Chart
 define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','dx.chartjs.debug'], function(dataUtils,color,trendData) {
 	return {
 		show: function($rangeEl) {
-
 			$("#rangeSelectorContainer").dxRangeSelector({
    	 			scale: {
         			startValue: new Date(trendData.actual.series[0].date),
@@ -27,7 +26,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','dx.chartj
 		               //setup default series options
 		               argumentField: 'date',
 		               border: {
-		                  color: color.rgbToString(color.palette.darkGrey),
+		                  color: color.rgbToString(color.getTextColor('darkGrey')),
 		                  width: 2,
 		                  visible: true
 		               },
@@ -43,7 +42,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','dx.chartj
 		               	  data: trendData.actual.series,
 		               	  type: 'spline',
 		                  valueField: 'DCS',
-		                  color: color.rgbToString(color.palette.darkGrey),
+		                  color: color.rgbToString(color.getTextColor('darkGrey')),
 		               },
 		               
 

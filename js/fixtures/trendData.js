@@ -886,7 +886,8 @@ define(function() {
 	series data prototype
 	{
 		actual: {
-			subs: ['DCS','FRS','ICR','IHT','PRG'],
+			subs: [ { 
+				code:'DCS - Actual','FRS - Actual','ICR - Actual','IHT - Actual','PRG - Actual'],
 			series: [
 				{
 					date: "2013-01-01T00:00:00",
@@ -923,7 +924,7 @@ define(function() {
 			]
 		},
 		plan: {
-			subs: ['DCS','PRG'],
+			subs: ['DCS - Plan','PRG - Plan'],
 			series: [
 			series: [
 				{
@@ -959,8 +960,8 @@ define(function() {
 	seriesData.plan.series = [];
 
 	var dateList = [];
-	var dateFinal = [];
 	var subList=[];
+	var actualSubList = [];
 	var planSubList = [];
 
 	var actualList = [];
@@ -978,14 +979,16 @@ define(function() {
 		if (subList.indexOf(sub) == -1) {
 			subList.push(sub)
 		}
+		if(actualSubList.indexOf(sub ) == -1) 
+			actualSubList.push(sub)
 		if(plan !=0 && planSubList.indexOf(sub) == -1) {
 			planSubList.push(sub);
 		}
 	});
 
 	dateList.forEach(function(date) {
-		var actualObj = {date: new Date(date)};
-		var planObj = { date: new Date(date) };
+		var actualObj = {date: date, dateObj: new Date(date)};
+		var planObj = { date: date, dateObj: new Date(date) };
 		subList.forEach(function(sub) {			
 			data.forEach(function(data) {
 				if(data.Date == date && data.ContractorCode == sub) {
@@ -997,10 +1000,11 @@ define(function() {
 				}
 			});
 		});
+
 		seriesData.actual.series.push(actualObj);
 		seriesData.plan.series.push(planObj);
 	});
-	seriesData.actual.subs = subList;
+	seriesData.actual.subs = actualSubList;
 	seriesData.plan.subs = planSubList;
 	return seriesData;
 });

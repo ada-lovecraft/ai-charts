@@ -22,7 +22,7 @@ requirejs.config({
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','globalize','app/bar','app/dataUtilities', 'jquery-ui','jquery.nouislider.min'],
+requirejs(['jquery','knockout','globalize','app/bar','app/dataUtilities', 'jquery-ui','jquery.nouislider.min','chosen.jquery.min.js'],
 function   ($,ko,globalize,bar,dataUtils) {
 
   //main

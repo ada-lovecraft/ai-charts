@@ -4,18 +4,64 @@ Color Utilities
 define(function() {
 	this.lerp = function(a,b,u) {
 	    return (1-u) * a + u * b;
-	}
+	};
+
+	this.componentToHex = function(c) {
+    	var hex = c.toString(16);
+    	return hex.length == 1 ? "0" + hex : hex;
+	};
+
+	this.subColors = {
+		'DCS':'black',
+		'PRG':'blue'
+	};
+	this.usedColors = ['black','blue'];
 	var self = this;
-//converts a hex string to an rgb object
-	return {
-		palette: {
-			darkGrey: { r:96, g: 106, b: 111 },
-			grey:{r: 177, g: 181, b:184 },
-			green: {r:0, g:175, b:142 },
-			orange: { r:255,g:138,b:53},
-			red: { r: 255, g: 67, b:77 },
+
+	this.palette = {
+		text: {
+			grey:{r: 204, g: 204, b:204 },
+			darkGrey:{r:66, g:66, b:66}
+		},
+		ui: {
+			green: {r:51, g:204, b:0 },
+			orange: { r:255,g:153,b:0},
+			red: { r: 255, g: 0, b:0 },
 			black: { r:0, g:0,b: 0},
-			white: {r:255,g:255,b:255}
+			white: {r:255,g:255,b:255},
+			blue: {r: 0,g:153,b:204}
+		}
+	};
+
+	return {
+		getUIColor: function(color) {
+			return self.palette.ui[color];
+		},
+		getTextColor: function(color) {
+			return self.palette.text[color];
+		},
+		getSubColor: function(sub) {
+			if(sub in subColors) {
+				return self.palette.ui[subColors[sub]];
+			} else {
+				if (self.usedColors.length >= self.palette.ui.length) 
+					self.usedColors = ['black','blue'];
+				for(var color in self.palette.ui) {
+					console.log(color,self.usedColors)
+					if (self.usedColors.indexOf(color) == -1) {
+						self.usedColors.push(color);
+						self.subColors[sub] = color;
+						return self.palette.ui[color];
+					} 
+				}
+			}
+		},
+		dumpSubs: function () {
+			console.log(self.subColors);
+			console.log(self.usedColors);
+		},
+		rgbToHex: function(color) {
+    		return "#" + self.componentToHex(color.r) + self.componentToHex(color.g) + self.componentToHex(color.b);
 		},
 		hexToRGB: function(hex) {
 		    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -28,6 +74,9 @@ define(function() {
 		//converts an rgb object to an rgb string (for css/javascript)
 		rgbToString: function(obj) {
 			return 'rgb('+obj.r+','+obj.g+','+obj.b+')';
+		},
+		rgbaToString: function(obj,opacity) {
+			return 'rgba(' + obj.r + ',' + obj.g + ',' + obj.b + ',' + opacity + ')';
 		},
 		//Returns a lerped color between startColor and endColor
 		fade: function(startColor, endColor, totalSteps, currentStep) {
