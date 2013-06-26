@@ -31,6 +31,9 @@ define(['fixtures/chartData','fixtures/trendData'], function(chartData){
 			data = newData;
 			return data;
 		},
+		cleanTrend: function() {
+			
+		},
 		getRangeDataByIndex: function(start, end) {
 			var rangeData = [];
 			if (start && end) {
