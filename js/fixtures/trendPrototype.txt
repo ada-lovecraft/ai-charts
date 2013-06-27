@@ -1,5 +1,5 @@
 {"actual": {
-		"subs": [ "DCS - Actual","FRS - Actual","ICR - Actual","IHT - Actual","PRG - Actual"],
+		"subs": [ "DCS","FRS","ICR","IHT","PRG"],
 		"series": [
 			{
 				"date": "2013-01-01T00:00:00",
@@ -36,27 +36,27 @@
 		]
 	},
 	"plan": {
-		"subs": ["DCS - Plan","PRG - Plan"],
+		"subs": ["DCS","PRG"],
 		"series": [
 			{
 				"date": "2013-01-01T00:00:00",
-				"DCS - Plan": 0,
-				"PRG - Plan": 0
+				"DCS": 0,
+				"PRG": 0
 			},
 			{
 				"date": "2013-02-01T00:00:00",
-				"DCS - Plan": 0,
-				"PRG - Plan": 0
+				"DCS": 0,
+				"PRG": 0
 			},
 			{
 				"date": "2013-03-01T00:00:00",
-				"DCS - Plan": 0,
-				"PRG - Plan": 0
+				"DCS": 0,
+				"PRG": 0
 			},
 			{
 				"date": "2013-04-01T00:00:00",
-				"DCS - Plan": 0,
-				"PRG - Plan": 0
+				"DCS": 0,
+				"PRG": 0
 			}
 		]
 	}

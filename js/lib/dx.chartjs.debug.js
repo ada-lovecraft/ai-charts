@@ -683,8 +683,10 @@
             return milliseconds
         };
     var getDatesDifferences = function(date1, date2) {
+
             var differences,
                 counter = 0;
+            
             differences = {
                 year: date1.getFullYear() !== date2.getFullYear(),
                 month: date1.getMonth() !== date2.getMonth(),

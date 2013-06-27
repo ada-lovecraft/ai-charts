@@ -25,8 +25,14 @@ Require Libs
 ***************************/
 requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities', 'jquery-ui','jquery.nouislider.min','chosen.jquery.min'],
 function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils) {    
+    trends.populateSubSelector($('#subSelector'));
     trends.show($('#aiRangeChart'));
     range.show($('#aiRangeChart'));
+
+    $('body').on('selectedSub', function(e) {
+
+        trends.show($('#aiRangeChart'),e.subs); 
+    })
 });
 
 

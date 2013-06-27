@@ -47,7 +47,6 @@ define(function() {
 				if (self.usedColors.length >= self.palette.ui.length) 
 					self.usedColors = ['black','blue'];
 				for(var color in self.palette.ui) {
-					console.log(color,self.usedColors)
 					if (self.usedColors.indexOf(color) == -1) {
 						self.usedColors.push(color);
 						self.subColors[sub] = color;
