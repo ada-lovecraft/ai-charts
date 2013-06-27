@@ -27,7 +27,14 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    	 			scale: {
         			startValue: new Date(data.actual.series[0].dateObj),
         			endValue: new Date(data.actual.series[data.actual.series.length-1].dateObj),
-        			minorTickInterval: 'month'
+        			marker: {
+        				visible: false
+        			},
+        			minorTickInterval: 'month',
+        			tick: {
+        				opacity: 0
+        			},
+        			valueType: 'datetime'
     			},
     			size: {
     				width: 800,

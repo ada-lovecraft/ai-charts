@@ -23,8 +23,8 @@ requirejs.config({
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities','app/config','chosen.jquery.min','bootstrap.min'],
-function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils,config) {    
+requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','chosen.jquery.min','bootstrap.min'],
+function   ($,ko,Mustache,globalize,trends,range,dataUtils,config) {    
 	var endPoint = $('#charts').data('endpoint') + 'Trend';
 	console.log('main ep:',endPoint);
     trends.populateSubSelector($('#subSelector'));

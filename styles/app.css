@@ -16,7 +16,8 @@
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
-	visibility: hidden;
+	position: absolute;
+	left: -10px;
 }
 
 .popover {
