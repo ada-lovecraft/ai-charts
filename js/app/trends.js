@@ -117,7 +117,9 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             commonAxisSettings: {
                label: {
                   font: {
-                     color: color.rgbToString(color.getTextColor('lightGray'))
+                     color: color.rgbToString(color.getTextColor('lightGray')),
+                     family: 'Roboto',
+                     weight: 300
                   }
                }
             },
