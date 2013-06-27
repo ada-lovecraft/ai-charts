@@ -169,11 +169,17 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             //define our series data
             series: series,
             legend: {
-               verticalAlignment: 'bottom',
+               backgroundColor: 'rgba(0,0,0,0)',
+               verticalAlignment: 'top',
                horizontalAlignment: 'center',
+               margin: 0,
                customizeText: function() {
                   return this.seriesName.replace(/ \- /, '\n');
-               }
+               },
+               font: {
+                  family: 'Roboto',
+                  weight: 300
+               },
             },
             tooltip: {
                enabled: false
@@ -182,7 +188,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 
                var date = new Date(clickedPoint.argument);
                var titleTemplate = '{{month}} {{year}} - {{type}}';
-               var contentTemplate = '<table class="table table-condensed">{{#points}}<tr class="{{highlighted}}"><td>{{value}}</td><td>{{sub}}</td></tr>{{/points}}</table>';
+               var contentTemplate = '<table class="table table-condensed"><thead>{{#highlight}}<th>{{value}}</th><th>{{sub}}</th>{{/highlight}}</thead><tbody>{{#points}}<tr><td>{{value}}</td><td>{{sub}}</td></tr>{{/points}}</tbody></table>';
                var points = null;
                
 
@@ -208,12 +214,11 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub,self.subList);
                else
                   points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub, self.subList);
-               
                $tooltip.popover({
                   placement: 'top',
                   title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear(), type: clickedPoint.series.tag.type}),
                   html: true,
-                  content: Mustache.render(contentTemplate, {points: points}),
+                  content: Mustache.render(contentTemplate, {highlight: points.shift(), points: points}),
                   animation: false,
                });
                

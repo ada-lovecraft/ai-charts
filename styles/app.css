@@ -37,8 +37,9 @@ body {
 .popover-title {
 	color: white;
 	text-align: center;
+	font-weight: 500;
 }
 
 .popover table tr.highlighted {
-	font-weight: bold;
+	font-weight: 700;
 }
