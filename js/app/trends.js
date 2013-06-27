@@ -3,25 +3,24 @@ Pie Chart
 *************************/
 define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config','mustache','dx.chartjs.debug','bootstrap.min'], function(dataUtils,color,trendData,config,Mustache) {
    var self = this;
-   this.subList =[];
+   this.subList = config.defaultSubs || [];
    self.selectedSubEvent = jQuery.Event('selectedSub');
    
-   this.triggerSelectedSubs = function(subList) {
-      var subs = [];
-      console.log('lol');
-      subList.each(function() {
+   this.triggerSelectedSubs = function(selectedSubList) {
+      var subs =  [].concat(config.defaultSubs);
+      selectedSubList.each(function() {
          subs.push(this.value);
       });
-      $('body').trigger(jQuery.Event('selectedSub',{subs: subs}));
+      this.subList = subs;
+      $('body').trigger(jQuery.Event('selectedSub'));
    }
 
    return {
       populateSubSelector: function($el) {
-         console.log('trendData: ',trendData);
          var optionTemplate = '{{#subs}}<option value="{{code}}">{{name}}</option>{{/subs}}';
          var subs = [];
          for(sub in trendData.actual.subs) {
-            if(sub != 'DCS') {
+            if(config.defaultSubs.indexOf(sub) == -1) {
                var subObj = {code: sub, name: trendData.actual.subs[sub]};
                subs.push(subObj);
             }
@@ -34,7 +33,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
       },
       show: function($el,selectedSubs) {
          //define series from trendData
-         var shownSubs = ['DCS'].concat(selectedSubs);
+         var shownSubs = self.subList;
          var series = [];
          
          for(var sub in trendData.plan.subs) {
@@ -139,38 +138,39 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                enabled: false
             },
             pointHover: function(clickedPoint) {
-               console.log('cp:',clickedPoint);
-               $tooltip = $('#tooltipShiv');
 
+               var date = new Date(clickedPoint.argument);
+               var titleTemplate = '{{month}} {{year}} - {{type}}';
+               var contentTemplate = '<table class="table table-condensed">{{#points}}<tr class="{{highlighted}}"><td>{{value}}</td><td>{{sub}}</td></tr>{{/points}}</table>';
+               var points = null;
+               
 
-
+               var $tooltip = $('#tooltipShiv');
                $tooltip.show();
 
                $tooltip.attr('style','background-color:' + color.rgbToHex(color.getSubColor(clickedPoint.series.tag.sub)));
                $tooltip.offset({top: ($el.position().top + clickedPoint.y) - $tooltip.height() + config.tooltipShivMargin.y , left: $el.position().left + clickedPoint.x + config.tooltipShivMargin.x});
+               
                $tooltip.mouseout(function() {
                   $tooltip.popover('destroy');
                   $tooltip.hide();
                });
+
+
                $tooltip.mouseleave(function() {
                   $tooltip.popover('destroy');
                   $tooltip.hide();
                });
 
-               var date = new Date(clickedPoint.argument);
-               var titleTemplate = '{{month}} {{year}}';
-               var contentTemplate = '<table class="table table-condensed">{{#points}}<tr class="{{highlighted}}"><td>{{value}}</td><td>{{sub}}</td></tr>{{/points}}</table>';
-               var points = null;
                
                if(clickedPoint.series.tag.type == "Plan")
-                  points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub);
+                  points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub,self.subList);
                else
-                  points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub);
-               
+                  points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub, self.subList);
                
                $tooltip.popover({
                   placement: 'top',
-                  title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear()}),
+                  title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear(), type: clickedPoint.series.tag.type}),
                   html: true,
                   content: Mustache.render(contentTemplate, {points: points}),
                   animation: false,

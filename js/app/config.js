@@ -9,6 +9,7 @@ define(function() {
 				local: 'http://localhost:3000/ai/js/fixtures/api.js',
 				remote: 'http://aidashboard.azurewebsites.net/api/accountsreceivabletrend'
 			}
-		}
+		},
+		defaultSubs: ['DCS']
 	}
 });

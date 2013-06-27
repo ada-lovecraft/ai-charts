@@ -34,19 +34,22 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 			});
 			return data;
 		},
-		translatePointsForTooltip: function(points, primarySub) {
+		translatePointsForTooltip: function(points, primarySub,subList) {
 			console.log('primarySub:',primarySub);
 			var data = [];
 			for(var prop in points) {
 				if (prop != 'date' && prop != 'dateObj') {
 					var pointObj ={};
 					pointObj.sub = prop;
-					pointObj.value = '$' + (points[prop]/1000000).toFixed(2) + 'MM';
+					if (points[prop] != null)
+						pointObj.value = '$' + (points[prop]/1000000).toFixed(2) + 'MM';
+					else 
+						pointObj.value = '--';
 					if (primarySub && prop == primarySub) {
 						pointObj.highlighted = "highlighted";
 						data.unshift(pointObj)
 					}
-					else
+					else if (subList.indexOf(prop) != -1)
 						data.push(pointObj);
 				}
 			}

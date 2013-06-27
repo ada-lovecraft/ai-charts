@@ -31,7 +31,7 @@ function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils) {
 
     $('body').on('selectedSub', function(e) {
 
-        trends.show($('#aiRangeChart'),e.subs); 
+        trends.show($('#aiRangeChart')); 
     })
 });
 

@@ -1,7 +1,23 @@
 /*************************
 Range Selection Chart 
 *************************/
-define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','dx.chartjs.debug'], function(dataUtils,color,trendData) {
+define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config', 'dx.chartjs.debug'], function(dataUtils,color,trendData,config) {
+	var series = [];
+	config.defaultSubs.forEach(function(sub) {
+		series.push({
+	       	  data: trendData.actual.series,
+	       	  type: 'spline',
+	          valueField: sub,
+	          color: color.rgbToString(color.getSubColor(sub))
+	       },
+	       {
+           	  data: trendData.plan.series,
+           	  type: 'splinearea',
+              valueField: sub,
+              color: color.rgbaToString(color.getSubColor(sub),.2)
+           }
+		);
+	});
 	return {
 		show: function($rangeEl) {
 			$("#rangeSelectorContainer").dxRangeSelector({
@@ -31,25 +47,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','dx.chartj
 		               }
 		            },
 		            //define our series data
-		            series: [
-
-		               {
-		               	  data: trendData.actual.series,
-		               	  type: 'spline',
-		                  valueField: 'DCS',
-		                  color: color.rgbToString(color.getTextColor('darkGrey')),
-		               },
-		               {
-		               	  data: trendData.plan.series,
-		               	  type: 'splinearea',
-		                  valueField: 'DCS',
-		                  color: color.rgbaToString(color.getTextColor('darkGrey'),.2),
-		               },
-		               
-
-		            ],
-
-		            title: "Trends",
+		            series: series,
 		            legend: {
 		               verticalAlignment: 'bottom',
 		               horizontalAlignment: 'center'
