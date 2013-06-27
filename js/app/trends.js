@@ -3,7 +3,7 @@ Pie Chart
 *************************/
 define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config','mustache','dx.chartjs.debug'], function(dataUtils,color,trendData,config,Mustache) {
    var self = this;
-   this.subList = config.defaultSubs || [];
+   this.subList = config.default.subs || [];
    self.selectedSubEvent = jQuery.Event('selectedSub');
    
    this.triggerSelectedSubs = function(selectedSubList) {
@@ -17,14 +17,18 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 
    return {
 
-      populateSubSelector: function($el) {
+      populateSubSelector: function($el,endPoint) {
          $el.chosen();
          var optionTemplate = '{{#selectedSubs}}<option selected value="{{code}}">{{name}}</option>{{/selectedSubs}}{{#subs}}<option value="{{code}}">{{name}}</option>{{/subs}}';
          var subs = [];
          var selectedSubs = [];
-         for(sub in trendData.actual.subs) {
-            if(config.defaultSubs.indexOf(sub) == -1) {
-               var subObj = {code: sub, name: trendData.actual.subs[sub]};
+         var data = trendData.getDataForEndPoint(endPoint);
+         console.log('data:' , data);
+
+
+         for(sub in data.actual.subs) {
+            if(config.default.subs.indexOf(sub) == -1) {
+               var subObj = {code: sub, name: data.actual.subs[sub]};
                if (config.preSelectedSubs.indexOf(sub) != -1)
                   selectedSubs.push(subObj);
                else
@@ -44,16 +48,19 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          console.log(self.subList);
          $el.append(Mustache.render(optionTemplate,{selectedSubs: selectedSubs, subs: subs}));
          $el.trigger("liszt:updated");
+
          $el.change(function() {
             self.triggerSelectedSubs($el.find(':selected'));
          });
+         
       },
-      show: function($el,selectedSubs) {
+      show: function($el,endPoint) {
          //define series from trendData
+         console.log('ep:',endPoint);
          var shownSubs = self.subList;
          var series = [];
-         
-         for(var sub in trendData.plan.subs) {
+         var data = trendData.getDataForEndPoint(endPoint);
+         for(var sub in data.plan.subs) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
                series.push({
@@ -65,7 +72,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                      color: thisColor
                   },
                   color: color.rgbaToString(thisColor,.2),
-                  data: trendData.plan.series, 
+                  data: data.plan.series, 
                   type:'splinearea', 
                   border:{
                      visible: false
@@ -77,7 +84,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             }
          } 
 
-         for(var sub in trendData.actual.subs) {
+         for(var sub in data.actual.subs) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
                var seriesObj = {};
@@ -88,7 +95,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                      sub: sub,
                      type: 'Actual'
                   }, 
-                  data: trendData.actual.series, 
+                  data: data.actual.series, 
                   type: 'line',
                   point: {
                      visible: false

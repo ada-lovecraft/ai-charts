@@ -23,14 +23,21 @@ requirejs.config({
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities', 'jquery-ui','jquery.nouislider.min','chosen.jquery.min','bootstrap.min'],
-function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils) {    
+requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities','app/config','chosen.jquery.min','bootstrap.min'],
+function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils,config) {    
     trends.populateSubSelector($('#subSelector'));
     trends.show($('#aiRangeChart'));
     range.show($('#aiRangeChart'));
+    var $toggle = $('.btn-group');
+
+    $toggle.click(function(e) {
+        console.log(e.target.value);
+        var targetEndPoint = e.target.value + 'Trend';
+        trends.show($('#aiRangeChart'),targetEndPoint);
+    })
+
 
     $('body').on('selectedSub', function(e) {
-
         trends.show($('#aiRangeChart')); 
     })
 });

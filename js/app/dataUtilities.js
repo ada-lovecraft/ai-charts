@@ -11,10 +11,11 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 		getMonthNameByDate: function(date) {
 			return constants.monthNames[date.getMonth()];
 		},
-		getActualSeriesDataByDate: function(date) {
+		getActualSeriesDataByDate: function(date,endPoint) {
 			var ms = date.getTime();
 			var data = [];
-			trendData.actual.series.forEach(function(el) {
+			var tData = trendData.getDataForEndPoint(endPoint);
+			tData.actual.series.forEach(function(el) {
 				var elms = el.dateObj.getTime();
 				if(elms == ms) {
 					data = el;
@@ -22,11 +23,12 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 			});
 			return data;
 		},
-		getPlanSeriesDataByDate: function(date) {
+		getPlanSeriesDataByDate: function(date,endPoint) {
 			var ms = date.getTime();
+			var tData = trendData.getDataForEndPoint(endPoint);
 
 			var data = [];
-			trendData.plan.series.forEach(function(el) {
+			tData.plan.series.forEach(function(el) {
 				var elms = el.dateObj.getTime();
 				if(elms == ms) {
 					data = el;

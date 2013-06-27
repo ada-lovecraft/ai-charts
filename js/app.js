@@ -15,77 +15,24 @@ requirejs.config({
     },
     shim: {
     	"jquery-ui": ['jquery'],
-    	"jquery.nouislider.min":['jquery']
+    	"jquery.nouislider.min":['jquery'],
+        "chosen.jquery.min":['jquery']
     }
 });
-
 
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery', 'knockout','globalize','app/trends','app/pie','app/range','app/bar','jquery-ui','jquery.nouislider.min'],
-function   ($,ko,globalize,trends,pie,range,bar) {
-	$pieCharts = $('#pieCharts');
-	$trendCharts = $('#trendCharts');
-	$rangeCharts = $('#rangeCharts');
-	$barCharts = $('#barCharts');
-
-    window.rangeCharts = $rangeCharts;
-    window.pieCharts = $pieCharts;
-	$pieCharts.show();
-	pie.show();
-
-	
-    $('#pie').click(function() {
-   		console.log('pie');
-		$trendCharts.hide();
-		$rangeCharts.hide();
-		$barCharts.hide();
-		$pieCharts.show();
-    	pie.show();
-    });
-
-	$('#trends').click( function() {
-		console.log('lines');
-		$rangeCharts.hide();
-		$barCharts.hide();
-		$pieCharts.hide();
-		$trendCharts.show();
-    	trends.show($('#aiAreaChart'));
-    });
-
-	$('#bar').click( function() {
-		console.log('bar');
-		$trendCharts.hide();
-		$rangeCharts.hide();
-		$pieCharts.hide();
-		$barCharts.show();
-    	bar.show();
-    });
-
-	$('#range').click( function() {
-		console.log('range');
-		$trendCharts.hide();
-		$barCharts.hide();
-		$pieCharts.hide();
-
-		$rangeCharts.show();
-		trends.show($('#aiRangeChart'));
-    	range.show($('#aiRangeChart'));
-    });
-
-	$('.nav a').click(function(){
-		$('.nav li').removeClass('active');
-		$(this).parent().addClass('active');
-	});
-
-	function hideAll() {
-		console.log('hiding');
-		$pieCharts.hide();
-		$trendCharts.hide();
-		$rangeCharts.hide();
-		$barCharts.hide();
-	}
+requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities','app/config','chosen.jquery.min','bootstrap.min'],
+function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils,config) {    
+	var endPoint = $('#charts').data('endpoint') + 'Trend';
+	console.log('main ep:',endPoint);
+    trends.populateSubSelector($('#subSelector'));
+    trends.show($('#aiRangeChart'),endPoint);
+    range.show($('#aiRangeChart'));
+    $('body').on('selectedSub', function(e) {
+        trends.show($('#aiRangeChart'), endPoint); 
+    })
 });
 
 

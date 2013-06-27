@@ -24,12 +24,11 @@ define(function() {
 			darkGrey:{r:66, g:66, b:66}
 		},
 		ui: {
-			green: {r:51, g:204, b:0 },
+			green: {r:55, g:178, b:14},
 			orange: { r:255,g:153,b:0},
-			red: { r: 255, g: 0, b:0 },
+			red: { r: 228, g: 11, b:11 },
 			black: { r:0, g:0,b: 0},
-			white: {r:255,g:255,b:255},
-			blue: {r: 0,g:153,b:204}
+			blue: {r: 0,g:159,b:218}
 		}
 	};
 
