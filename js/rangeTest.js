@@ -23,7 +23,7 @@ requirejs.config({
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities', 'jquery-ui','jquery.nouislider.min','chosen.jquery.min'],
+requirejs(['jquery','knockout','mustache','globalize','fixtures/chartData','app/trends','app/range','app/dataUtilities', 'jquery-ui','jquery.nouislider.min','chosen.jquery.min','bootstrap.min'],
 function   ($,ko,Mustache,globalize,chartData,trends,range,dataUtils) {    
     trends.populateSubSelector($('#subSelector'));
     trends.show($('#aiRangeChart'));

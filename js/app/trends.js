@@ -1,7 +1,7 @@
 /*************************
 Pie Chart 
 *************************/
-define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config','mustache','dx.chartjs.debug','bootstrap.min'], function(dataUtils,color,trendData,config,Mustache) {
+define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config','mustache','dx.chartjs.debug'], function(dataUtils,color,trendData,config,Mustache) {
    var self = this;
    this.subList = config.defaultSubs || [];
    self.selectedSubEvent = jQuery.Event('selectedSub');
@@ -16,17 +16,34 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    }
 
    return {
+
       populateSubSelector: function($el) {
-         var optionTemplate = '{{#subs}}<option value="{{code}}">{{name}}</option>{{/subs}}';
+         $el.chosen();
+         var optionTemplate = '{{#selectedSubs}}<option selected value="{{code}}">{{name}}</option>{{/selectedSubs}}{{#subs}}<option value="{{code}}">{{name}}</option>{{/subs}}';
          var subs = [];
+         var selectedSubs = [];
          for(sub in trendData.actual.subs) {
             if(config.defaultSubs.indexOf(sub) == -1) {
                var subObj = {code: sub, name: trendData.actual.subs[sub]};
-               subs.push(subObj);
+               if (config.preSelectedSubs.indexOf(sub) != -1)
+                  selectedSubs.push(subObj);
+               else
+                  subs.push(subObj);
             }
          }
-         $el.append(Mustache.render(optionTemplate,{subs: subs}));
-         $el.chosen();
+
+         var keys = [];
+         selectedSubs.forEach(function(el) {
+            keys.push(el.code);
+         });
+
+         console.log(keys);
+         console.log(self.subList);
+
+         self.subList = self.subList.concat(keys);
+         console.log(self.subList);
+         $el.append(Mustache.render(optionTemplate,{selectedSubs: selectedSubs, subs: subs}));
+         $el.trigger("liszt:updated");
          $el.change(function() {
             self.triggerSelectedSubs($el.find(':selected'));
          });

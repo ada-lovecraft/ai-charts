@@ -10,6 +10,7 @@ define(function() {
 				remote: 'http://aidashboard.azurewebsites.net/api/accountsreceivabletrend'
 			}
 		},
-		defaultSubs: ['DCS']
+		defaultSubs: ['DCS'],
+		preSelectedSubs: ['PRG','FRS','ICR','IHT']
 	}
 });
