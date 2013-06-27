@@ -49,3 +49,10 @@ body {
 .popover table td.text-right, .popover table th.text-right {
 	text-align: right;
 }
+
+.chzn-container-multi .chzn-choices .search-choice {
+	background-image: none;
+	border-radius: 0px;
+	-webkit-border-radius:0px;
+	-moz-border-radius: 0px;
+}

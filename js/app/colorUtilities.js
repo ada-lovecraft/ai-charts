@@ -43,6 +43,7 @@ define(function() {
 			if(sub in subColors) {
 				return self.palette.ui[subColors[sub]];
 			} else {
+				//TODO: add a shim for IE7
 				if (self.usedColors.length >= Object.keys(self.palette.ui).length) 
 					self.usedColors = ['black','blue'];
 				for(var color in self.palette.ui) {

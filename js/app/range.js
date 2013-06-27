@@ -77,7 +77,6 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 			    },       
 			    sliderMarker: {
 			    	customizeText: function() {
-			    		console.log(this.value);
 			    		var date = new Date(this.value);
 			    		return dataUtils.getMonthShortNameByDate(date) + ' ' + date.getFullYear();
 			    	},

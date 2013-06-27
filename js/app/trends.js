@@ -7,7 +7,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    self.selectedSubEvent = jQuery.Event('selectedSub');
    
    this.triggerSelectedSubs = function(selectedSubList) {
-      var subs =  [].concat(config.defaultSubs);
+      var subs =  [].concat(config.defaults.subs);
       selectedSubList.each(function() {
          subs.push(this.value);
       });
@@ -45,6 +45,11 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          self.subList = self.subList.concat(keys);
          $el.append(Mustache.render(optionTemplate,{selectedSubs: selectedSubs, subs: subs}));
          $el.trigger("liszt:updated");
+
+         $el.find('option:selected').each(function(el) {
+            var $this = $(this);
+            $this.attr('style','background-color: ' + color.rgbaToString(color.getSubColor($this.val()),.2));
+         });
 
          $el.change(function() {
             self.triggerSelectedSubs($el.find(':selected'));
