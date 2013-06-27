@@ -26,7 +26,6 @@ Require Libs
 requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','chosen.jquery.min','bootstrap.min'],
 function   ($,ko,Mustache,globalize,trends,range,dataUtils,config) {    
 	var endPoint = $('#charts').data('endpoint') + 'Trend';
-	console.log('main ep:',endPoint);
     trends.populateSubSelector($('#subSelector'));
     trends.show($('#aiRangeChart'),endPoint);
     range.show($('#aiRangeChart'));

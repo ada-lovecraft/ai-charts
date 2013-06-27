@@ -7,7 +7,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 		show: function($rangeEl,endPoint) {
 			var series = [];
 			var data = trendData.getDataForEndPoint(endPoint);
-			config.default.subs.forEach(function(sub) {
+			config.defaults.subs.forEach(function(sub) {
 				series.push({
 			       	  data: data.actual.series,
 			       	  type: 'line',
@@ -24,30 +24,12 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 			});
 
 			$("#rangeSelectorContainer").dxRangeSelector({
-   	 			scale: {
-        			startValue: new Date(data.actual.series[0].dateObj),
-        			endValue: new Date(data.actual.series[data.actual.series.length-1].dateObj),
-        			marker: {
-        				visible: false
-        			},
-        			minorTickInterval: 'month',
-        			tick: {
-        				opacity: 0
-        			},
-        			valueType: 'datetime'
-    			},
-    			size: {
-    				width: 730,
-    				height: 150
-    			},
 				behavior: {
-			    	callSelectedRangeChanged: "onMoving"
+					manualRangeSelectionEnabled: true,
+					callSelectedRangeChanged: "onMovingComplete"
+
 				},
-    			selectedRangeChanged: function (e) {
-			        var zoomedChart = $rangeEl.dxChart('instance');
-			        zoomedChart.zoomArgument(e.startValue, e.endValue);
-			    },       
-    			chart: {
+				chart: {
     				commonSeriesSettings: {
 		               //setup default series options
 		               argumentField: 'dateObj',
@@ -69,7 +51,43 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 		            },
 
 		            adjustOnZoom: false
-    			}
+    			},
+   	 			scale: {
+        			startValue: new Date(data.actual.series[0].dateObj),
+        			endValue: new Date(data.actual.series[data.actual.series.length-1].dateObj),
+        			marker: {
+        				visible: false
+        			},
+        			label: {
+        				visible: false
+        			},
+        			minorTickInterval: 'month',
+        			tick: {
+        				opacity: 0
+        			},
+        			valueType: 'datetime'
+    			},
+    			size: {
+    				width: 730,
+    				height: 100
+    			},
+    			selectedRangeChanged: function (e) {
+			        var zoomedChart = $rangeEl.dxChart('instance');
+			        zoomedChart.zoomArgument(e.startValue, e.endValue);
+			    },       
+			    sliderMarker: {
+			    	customizeText: function() {
+			    		console.log(this.value);
+			    		var date = new Date(this.value);
+			    		return dataUtils.getMonthShortNameByDate(date) + ' ' + date.getFullYear();
+			    	},
+			    	font: {
+			    		family: 'Roboto',
+			    		weight: 300
+			    	},
+			    	position: 'outside'
+			    }
+    			
 			});
 		}
 	}

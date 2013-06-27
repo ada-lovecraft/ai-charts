@@ -7780,7 +7780,8 @@ DevExpress.social = {};
                 font: {
                     color: 'white',
                     size: 11
-                }
+                },
+                position: 'outside'
             },
             sliderHandles: {
                 width: 1,
@@ -25234,7 +25235,8 @@ DevExpress.social = {};
                     format: undefined,
                     precision: undefined,
                     customizeText: undefined,
-                    placeholderSize: undefined
+                    placeholderSize: undefined,
+                    position:'outside'
                 },
                 behavior: {
                     snapToTicks: true,
@@ -25288,13 +25290,25 @@ DevExpress.social = {};
                     textBBox = rangeSelectorUtils.getTextBBox(renderer, formattedText, scaleOptions.label.font);
                 return Math.ceil(textBBox.width / 2)
             };
-        var calculateRangeContainerCanvas = function(size, margin, sliderMarkerSpacing) {
-                var canvas = {
+        var calculateRangeContainerCanvas = function(size, margin, sliderMarkerSpacing, sliderMarkerOptions) {
+                var canvas = {};
+                if(sliderMarkerOptions.position =='outside') {
+                    console.log('markers on the outside');
+                    canvas = {
                         left: margin.left + sliderMarkerSpacing.left,
                         top: margin.top + sliderMarkerSpacing.top,
                         width: size.width - margin.left - margin.right - sliderMarkerSpacing.left - sliderMarkerSpacing.right,
                         height: size.height - margin.top - margin.bottom - sliderMarkerSpacing.top - sliderMarkerSpacing.bottom
                     };
+                } else if( sliderMarkerOptions.position == 'inside') {
+                    console.log('markers on the inside');
+                    canvas = {
+                        left: margin.left,
+                        top: margin.top,
+                        width: size.width - margin.left - margin.right,
+                        height: size.height - margin.top - margin.bottom 
+                    };
+                }
                 if (canvas.width <= 0)
                     canvas.width = 1;
                 return canvas
@@ -25609,7 +25623,7 @@ DevExpress.social = {};
                 sliderMarkerOptions = prepareSliderMarkersOptions(self, scaleOptions, sizeOptions.width);
                 selectedRange = initSelection(self, scaleOptions);
                 sliderMarkerSpacing = calculateSliderMarkersSpacing(self.renderer, sizeOptions, scaleOptions, sliderMarkerOptions);
-                rangeContainerCanvas = calculateRangeContainerCanvas(sizeOptions, self.option('margin'), sliderMarkerSpacing);
+                rangeContainerCanvas = calculateRangeContainerCanvas(sizeOptions, self.option('margin'), sliderMarkerSpacing,sliderMarkerOptions);
                 scaleLabelsAreaHeight = calculateScaleAreaHeight(self.renderer, scaleOptions, showScaleMarkers(scaleOptions));
                 self.translator = createTranslator(translatorRange, createTranslatorCanvas(sizeOptions, rangeContainerCanvas, scaleLabelsAreaHeight));
                 scaleOptions.ticksInfo = getTicksInfo(self, scaleOptions, self.translator, rangeContainerCanvas.width);

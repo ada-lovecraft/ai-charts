@@ -1,6 +1,6 @@
 define(function() {
 	return {
-		default: {
+		defaults: {
 			subs:['DCS'],
 			endPoints: {
 				trend: 'accountsReceivableTrend'

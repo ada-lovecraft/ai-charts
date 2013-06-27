@@ -3,7 +3,7 @@ Pie Chart
 *************************/
 define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config','mustache','dx.chartjs.debug'], function(dataUtils,color,trendData,config,Mustache) {
    var self = this;
-   this.subList = config.default.subs || [];
+   this.subList = config.defaults.subs || [];
    self.selectedSubEvent = jQuery.Event('selectedSub');
    
    this.triggerSelectedSubs = function(selectedSubList) {
@@ -23,11 +23,10 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          var subs = [];
          var selectedSubs = [];
          var data = trendData.getDataForEndPoint(endPoint);
-         console.log('data:' , data);
 
 
          for(sub in data.actual.subs) {
-            if(config.default.subs.indexOf(sub) == -1) {
+            if(config.defaults.subs.indexOf(sub) == -1) {
                var subObj = {code: sub, name: data.actual.subs[sub]};
                if (config.preSelectedSubs.indexOf(sub) != -1)
                   selectedSubs.push(subObj);
@@ -41,11 +40,9 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             keys.push(el.code);
          });
 
-         console.log(keys);
-         console.log(self.subList);
+
 
          self.subList = self.subList.concat(keys);
-         console.log(self.subList);
          $el.append(Mustache.render(optionTemplate,{selectedSubs: selectedSubs, subs: subs}));
          $el.trigger("liszt:updated");
 
@@ -56,7 +53,6 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
       },
       show: function($el,endPoint) {
          //define series from trendData
-         console.log('ep:',endPoint);
          var shownSubs = self.subList;
          var series = [];
          var data = trendData.getDataForEndPoint(endPoint);
@@ -214,9 +210,9 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 
                
                if(clickedPoint.series.tag.type == "Plan")
-                  points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub,self.subList);
+                  points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument,endPoint), clickedPoint.series.tag.sub,self.subList);
                else
-                  points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub, self.subList);
+                  points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument,endPoint), clickedPoint.series.tag.sub, self.subList);
 
                $tooltip.popover({
                   placement: 'top',

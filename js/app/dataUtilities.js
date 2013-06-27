@@ -41,8 +41,6 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 			return data;
 		},
 		translatePointsForTooltip: function(points, primarySub,subList) {
-			console.log('points: ' , points)
-			console.log('primarySub:',primarySub);
 			var subs = trendData.getSubList();
 			var data = [];
 			for(var prop in points) {

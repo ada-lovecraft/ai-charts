@@ -7,8 +7,7 @@ define(['app/config'],function(config) {
 
 	return {
 		getDataForEndPoint: function(ep) {
-			var endPoint = ep || config.default.endPoints.trend;
-			console.log(endPoint);
+			var endPoint = ep || config.defaults.endPoints.trend;
 			if (window.trendData == undefined)
 				window.trendData = {};
 			if (window.trendData[endPoint] == undefined) {
@@ -71,7 +70,6 @@ define(['app/config'],function(config) {
 			});
 			seriesData.actual.subs = subList;
 			seriesData.plan.subs = planSubList;
-			console.log(seriesData);
 			return seriesData;
 		},
 		getSubList: function() {
