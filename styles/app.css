@@ -32,6 +32,8 @@ body {
 	border: none !important;
 	padding: 0px;
 	margin-top:5px;
+	color: #666;
+	min-width: 175px;
 }
 
 .popover-title {
@@ -42,4 +44,8 @@ body {
 
 .popover table tr.highlighted {
 	font-weight: 700;
+}
+
+.popover table td.text-right, .popover table th.text-right {
+	text-align: right;
 }

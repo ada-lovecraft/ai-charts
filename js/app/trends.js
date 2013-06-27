@@ -60,6 +60,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          var shownSubs = self.subList;
          var series = [];
          var data = trendData.getDataForEndPoint(endPoint);
+
          for(var sub in data.plan.subs) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
@@ -68,12 +69,13 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   name:sub +' - Plan', 
                   tag: {
                      sub: sub,
+                     name: data.plan.subs[sub],
                      type: 'Plan',
                      color: thisColor
                   },
                   color: color.rgbaToString(thisColor,.2),
                   data: data.plan.series, 
-                  type:'splinearea', 
+                  type: 'splinearea', 
                   border:{
                      visible: false
                   },
@@ -93,7 +95,8 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   name:sub + ' - Actual',
                   tag: {
                      sub: sub,
-                     type: 'Actual'
+                     type: 'Actual',
+                     name: data.actual.subs[sub]
                   }, 
                   data: data.actual.series, 
                   type: 'line',
@@ -150,7 +153,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                type: 'datetime',
                label: {
                   customizeText: function() {
-                     return dataUtils.getMonthShortNameByDate(this.value).toUpperCase();
+                     return dataUtils.getMonthShortNameByDate(this.value);
                   }
                }
 
@@ -170,7 +173,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             series: series,
             legend: {
                backgroundColor: 'rgba(0,0,0,0)',
-               verticalAlignment: 'top',
+               verticalAlignment: 'bottom',
                horizontalAlignment: 'center',
                margin: 0,
                customizeText: function() {
@@ -188,7 +191,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 
                var date = new Date(clickedPoint.argument);
                var titleTemplate = '{{month}} {{year}} - {{type}}';
-               var contentTemplate = '<table class="table table-condensed"><thead>{{#highlight}}<th>{{value}}</th><th>{{sub}}</th>{{/highlight}}</thead><tbody>{{#points}}<tr><td>{{value}}</td><td>{{sub}}</td></tr>{{/points}}</tbody></table>';
+               var contentTemplate = '<table class="table table-condensed"><thead>{{#highlight}}<th>{{value}}</th><th class="text-right">{{sub}}</th>{{/highlight}}</thead><tbody>{{#points}}<tr><td>{{value}}</td><td class="text-right">{{sub}}</td></tr>{{/points}}</tbody></table>';
                var points = null;
                
 
@@ -214,6 +217,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub,self.subList);
                else
                   points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument), clickedPoint.series.tag.sub, self.subList);
+
                $tooltip.popover({
                   placement: 'top',
                   title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear(), type: clickedPoint.series.tag.type}),

@@ -2,6 +2,9 @@
 Trend Data
 *************************/
 define(['app/config'],function(config) {
+	var self = this;
+	self.subList = {};
+
 	return {
 		getDataForEndPoint: function(ep) {
 			var endPoint = ep || config.default.endPoints.trend;
@@ -43,9 +46,10 @@ define(['app/config'],function(config) {
 				var planDataObj = {date: date, dateObj: new Date(date)};
 				trendData[endPoint].DataSource.forEach(function(data){
 					
-					if(subList.indexOf(data.ContractorCode) == -1)
+					if(subList.indexOf(data.ContractorCode) == -1) { 
 						subList[data.ContractorCode] = data.ContractorName;
-
+						self.subList[data.ContractorCode] = data.ContractorName;
+					}
 					data.DataPoints.forEach(function(dataPoint) {
 						if (dataPoint.Date == date) {
 							if(data.DataType == "Actual")
@@ -69,6 +73,9 @@ define(['app/config'],function(config) {
 			seriesData.plan.subs = planSubList;
 			console.log(seriesData);
 			return seriesData;
+		},
+		getSubList: function() {
+			return self.subList;
 		}
 	}
 	

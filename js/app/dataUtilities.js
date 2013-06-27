@@ -23,6 +23,10 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 			});
 			return data;
 		},
+		getSubNameByAbbrev: function(sub) {
+			var subs = trendData.getSubList();
+			return subs[sub];
+		},
 		getPlanSeriesDataByDate: function(date,endPoint) {
 			var ms = date.getTime();
 			var tData = trendData.getDataForEndPoint(endPoint);
@@ -37,12 +41,14 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 			return data;
 		},
 		translatePointsForTooltip: function(points, primarySub,subList) {
+			console.log('points: ' , points)
 			console.log('primarySub:',primarySub);
+			var subs = trendData.getSubList();
 			var data = [];
 			for(var prop in points) {
 				if (prop != 'date' && prop != 'dateObj') {
 					var pointObj ={};
-					pointObj.sub = prop;
+					pointObj.sub = subs[prop];
 					if (points[prop] != null)
 						pointObj.value = '$' + (points[prop]/1000000).toFixed(2) + 'MM';
 					else 
