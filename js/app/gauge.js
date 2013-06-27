@@ -31,7 +31,7 @@ define(['app/colorUtilities', 'app/chartConfig'], function(color,config) {
 					ranges.push( {
 						startValue: Math.ceil(i*rangeMarker),
 						endValue: Math.ceil((i*rangeMarker) + rangeMarker),
-						color: color.rgbToString(color.fade(color.palette.darkGrey, endColor,config.rangeCount,i)),
+						color: color.rgbToString(color.fade(color.palette.darkGray, endColor,config.rangeCount,i)),
 					});
 				}
 				

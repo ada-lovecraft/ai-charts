@@ -20,8 +20,8 @@ define(function() {
 
 	this.palette = {
 		text: {
-			grey:{r: 204, g: 204, b:204 },
-			darkGrey:{r:66, g:66, b:66}
+			lightGray:{r: 204, g: 204, b:204 },
+			darkGray:{r:66, g:66, b:66}
 		},
 		ui: {
 			green: {r:55, g:178, b:14},
@@ -37,16 +37,20 @@ define(function() {
 			return self.palette.ui[color];
 		},
 		getTextColor: function(color) {
+			console.log('color',color);
+			console.log('nc:',self.palette.text[color]);
 			return self.palette.text[color];
 		},
 		getSubColor: function(sub) {
 			if(sub in subColors) {
 				return self.palette.ui[subColors[sub]];
 			} else {
-				if (self.usedColors.length >= self.palette.ui.length) 
+				console.log('color length: ' , self.usedColors, self.usedColors.length, Object.keys(self.palette.ui).length);
+				if (self.usedColors.length >= Object.keys(self.palette.ui).length) 
 					self.usedColors = ['black','blue'];
 				for(var color in self.palette.ui) {
 					if (self.usedColors.indexOf(color) == -1) {
+						console.log('color:',color);
 						self.usedColors.push(color);
 						self.subColors[sub] = color;
 						return self.palette.ui[color];
@@ -71,6 +75,7 @@ define(function() {
 		},
 		//converts an rgb object to an rgb string (for css/javascript)
 		rgbToString: function(obj) {
+			console.log('obj:',obj);
 			return 'rgb('+obj.r+','+obj.g+','+obj.b+')';
 		},
 		rgbaToString: function(obj,opacity) {

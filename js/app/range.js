@@ -37,7 +37,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
         			valueType: 'datetime'
     			},
     			size: {
-    				width: 800,
+    				width: 730,
     				height: 150
     			},
 				behavior: {

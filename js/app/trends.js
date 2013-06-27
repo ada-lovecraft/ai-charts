@@ -111,16 +111,31 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          //define the area chart
          $el.dxChart({
             size: {
-               width: 800,
+               width: 730,
                height: 400
             },
-
+            commonAxisSettings: {
+               label: {
+                  font: {
+                     color: color.rgbToString(color.getTextColor('lightGray'))
+                  }
+               }
+            },
+            commonPaneSettings: {
+               border: {
+                  visible: true,
+                  left: true,
+                  right: false,
+                  top: false,
+                  color: color.rgbToString(color.getTextColor('lightGray'))
+               }
+            },
             commonSeriesSettings: {
                //setup default series options
                argumentField: 'dateObj',
                type: 'line',
                border: {
-                  color: color.rgbToString(color.getTextColor('darkGrey')),
+                  color: color.rgbToString(color.getTextColor('darkGray')),
                   width: 2,
                   visible: true
                },
