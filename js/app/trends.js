@@ -18,7 +18,6 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    return {
 
       populateSubSelector: function($el,endPoint) {
-         $el.chosen();
          var optionTemplate = '{{#selectedSubs}}<option selected value="{{code}}">{{name}}</option>{{/selectedSubs}}{{#subs}}<option value="{{code}}">{{name}}</option>{{/subs}}';
          var subs = [];
          var selectedSubs = [];
@@ -45,10 +44,18 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          self.subList = self.subList.concat(keys);
          $el.append(Mustache.render(optionTemplate,{selectedSubs: selectedSubs, subs: subs}));
          $el.trigger("liszt:updated");
-
          $el.find('option:selected').each(function(el) {
-            var $this = $(this);
-            $this.attr('style','background-color: ' + color.rgbaToString(color.getSubColor($this.val()),.2));
+            var $option = $(this);
+            var newColor = color.rgbaToString(color.getSubColor($option.val()),.2);
+            var name = dataUtils.getSubNameByAbbrev($option.val());
+            $el.parent().find('li.search-choice').each(function(choice) {
+               var $choice = $(this);
+               console.log(name);
+               if ($choice.text() == name) {
+                  console.log('match Found');
+                  $choice.attr('style','background-color: ' + newColor);
+               }
+            });
          });
 
          $el.change(function() {
@@ -67,7 +74,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                var thisColor = color.getSubColor(sub);
                series.push({
                   valueField: sub, 
-                  name:sub +' - Plan', 
+                  name: sub +' - Plan', 
                   tag: {
                      sub: sub,
                      name: data.plan.subs[sub],
@@ -104,12 +111,10 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   point: {
                      visible: false
                   },
-                  color: color.rgbToString(thisColor),
+                  color: color.rgbToString(thisColor)
                });
             }
          } 
-
-         
 
 
          //define the area chart
@@ -157,7 +162,6 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                      return dataUtils.getMonthShortNameByDate(this.value);
                   }
                }
-
             },
             valueAxis: {
                label: {
@@ -168,7 +172,6 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                 grid: {
                   visible: false
                }
-
             },
             //define our series data
             series: series,
@@ -183,7 +186,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                font: {
                   family: 'Roboto',
                   weight: 300
-               },
+               }
             },
             tooltip: {
                enabled: false
@@ -224,7 +227,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear(), type: clickedPoint.series.tag.type}),
                   html: true,
                   content: Mustache.render(contentTemplate, {highlight: points.shift(), points: points}),
-                  animation: false,
+                  animation: false
                });
                
                $tooltip.popover('show');

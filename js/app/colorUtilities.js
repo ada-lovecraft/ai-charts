@@ -12,8 +12,8 @@ define(function() {
 	};
 
 	this.subColors = {
-		'DCS':'black',
-		'PRG':'blue'
+		'DCS':'blue',
+		'PRG':'red'
 	};
 	this.usedColors = ['black','blue'];
 	var self = this;

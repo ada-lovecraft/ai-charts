@@ -18,7 +18,7 @@ define(function() {
 			paymentsTrend: {
 				local: 'http://localhost:3000/ai/js/fixtures/api.js',
 				remote: 'http://aidashboard.azurewebsites.net/api/paymentstrend'
-			},
+			}
 		},
 		preSelectedSubs: ['PRG','FRS','ICR','IHT']
 	}

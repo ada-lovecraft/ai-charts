@@ -7424,7 +7424,7 @@ DevExpress.social = {};
     core.ParseUtils = parseUtils
 })(jQuery, DevExpress);
 
-// Module viz, file default.js
+// Module viz, file defaults.js
 
 (function($, DX, undefined) {
     DX.viz.themes = DX.viz.themes || [];

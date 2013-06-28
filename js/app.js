@@ -16,22 +16,53 @@ requirejs.config({
     shim: {
     	"jquery-ui": ['jquery'],
     	"jquery.nouislider.min":['jquery'],
-        "chosen.jquery.min":['jquery']
+        "chosen.jquery.min":['jquery'],
+        'jquery.blockUI':['jquery']
     }
 });
 
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','chosen.jquery.min','bootstrap.min'],
-function   ($,ko,Mustache,globalize,trends,range,dataUtils,config) {    
+requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','jquery.blockUI','bootstrap.min'],
+function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {   
+
+    $.blockUI.defaults.css = {};
+    $.blockUI.defaults.overlayCSS = {};
+
+    /**************************************
+    Register Global Event Listeners
+    ***************************************/
 	var endPoint = $('#charts').data('endpoint') + 'Trend';
+    $('#rangeCharts').block({message: 'Loading Chart Data', });
+
+    /**************************************
+    Register Global Event Listeners
+    ***************************************/
+
+    $('body').on('loadingTrendData:'+endPoint, function(e) {
+        console.log('loading data for: ' + endPoint);
+        
+    });
+
+    $('body').on('loadedTrendData:'+endPoint, function(e) {
+        console.log('data loaded for: ' + endPoint);
+        $('#rangeSelectorContainer').show();
+        $('#aiRangeChart').show();
+        $('#rangeCharts').unblock();
+    });
+
+    $('body').on('selectedSub', function(e) {
+        trends.show($('#aiRangeChart'), endPoint); 
+    });
+
+
     trends.populateSubSelector($('#subSelector'));
     trends.show($('#aiRangeChart'),endPoint);
     range.show($('#aiRangeChart'));
-    $('body').on('selectedSub', function(e) {
-        trends.show($('#aiRangeChart'), endPoint); 
-    })
+   
+
+    
 });
 
 

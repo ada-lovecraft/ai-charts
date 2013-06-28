@@ -78,7 +78,9 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 			    sliderMarker: {
 			    	customizeText: function() {
 			    		var date = new Date(this.value);
-			    		return dataUtils.getMonthShortNameByDate(date) + ' ' + date.getFullYear();
+			    		var year = date.getYear();
+			    		year = year > 100 ? (year - 100) < 10 ? '0' + (year - 100) : (year-100) : year;
+			    		return dataUtils.getMonthShortNameByDate(date) + ' ' + year;
 			    	},
 			    	font: {
 			    		family: 'Roboto',

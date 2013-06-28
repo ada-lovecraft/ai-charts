@@ -11,6 +11,7 @@ define(['app/config'],function(config) {
 			if (window.trendData == undefined)
 				window.trendData = {};
 			if (window.trendData[endPoint] == undefined) {
+				$('body').trigger('loadingTrendData:'+endPoint);
 				$.ajax({
 				    url: config.endPoints[endPoint].remote,
 				    dataType: 'json',
@@ -18,6 +19,7 @@ define(['app/config'],function(config) {
 				    error: function (XMLHttpRequest, textStatus, errorThrown) {console.log("ERROR: ",textStatus, errorThrown) },
 				    success: function (data) {
 				        window.trendData[endPoint] = data;
+				        $('body').trigger('loadedTrendData:'+endPoint);
 				    }
 				});
 			};
@@ -32,7 +34,6 @@ define(['app/config'],function(config) {
 			seriesData.plan.subs = [];
 			seriesData.plan.series = [];
 
-			var subList=[];
 			var actualSubList = [];
 			var planSubList = [];
 
@@ -45,8 +46,8 @@ define(['app/config'],function(config) {
 				var planDataObj = {date: date, dateObj: new Date(date)};
 				trendData[endPoint].DataSource.forEach(function(data){
 					
-					if(subList.indexOf(data.ContractorCode) == -1) { 
-						subList[data.ContractorCode] = data.ContractorName;
+					if(actualSubList.indexOf(data.ContractorCode) == -1) { 
+						actualSubList[data.ContractorCode] = data.ContractorName;
 						self.subList[data.ContractorCode] = data.ContractorName;
 					}
 					data.DataPoints.forEach(function(dataPoint) {
@@ -54,8 +55,10 @@ define(['app/config'],function(config) {
 							if(data.DataType == "Actual")
 								actualDataObj[data.ContractorCode] = dataPoint.Value;
 							else if(data.DataType == "Plan") {
-								if(planSubList.indexOf(data.ContractorCode) == -1) 
+								if(planSubList.indexOf(data.ContractorCode) == -1) {
 									planSubList[data.ContractorCode] = data.ContractorName;
+									self.subList[data.ContractorCode] = data.ContractorName;
+								}
 								planDataObj[data.ContractorCode] = dataPoint.Value;
 							} else {
 								seriesData.trash.push(dataPoint);
@@ -68,8 +71,9 @@ define(['app/config'],function(config) {
 				seriesData.plan.series.push(planDataObj);
 
 			});
-			seriesData.actual.subs = subList;
+			seriesData.actual.subs = actualSubList;
 			seriesData.plan.subs = planSubList;
+			$('body').trigger('parsedTrendData:'+endPoint);
 			return seriesData;
 		},
 		getSubList: function() {

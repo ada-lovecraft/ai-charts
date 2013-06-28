@@ -28,6 +28,11 @@ body {
 	width: 730px;
 }
 
+#rangeCharts {
+	height: 600px;
+	width: 800px;
+}
+
 .popover {
 	border: none !important;
 	padding: 0px;
@@ -55,4 +60,21 @@ body {
 	border-radius: 0px;
 	-webkit-border-radius:0px;
 	-moz-border-radius: 0px;
+}
+
+
+.blockUI {
+
+}
+
+.blockOverlay {
+	background-color: rgba(255,255,255,.5);
+	background-image: url('../images/ajax-loader.gif');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.blockElement {
+	margin-top: 30px;
+	background-color: white;
 }
