@@ -38,7 +38,6 @@ body {
 }
 
 #rangeCharts {
-	width: 800px;
 }
 
 .popover {
@@ -147,4 +146,5 @@ Legend
 #trendLegend {
 	/*position: absolute;*/
 	font-size: 12px;
+	line-height: 10px;
 }

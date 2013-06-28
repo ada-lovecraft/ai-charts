@@ -34,7 +34,7 @@ function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {
     Register Global Event Listeners
     ***************************************/
 	var endPoint = $('#charts').data('endpoint') + 'Trend';
-    $('#rangeCharts').block({message: 'Loading Chart Data', });
+    $('#charts').block({message: 'Loading Chart Data', });
 
     /**************************************
     Register Global Event Listeners
@@ -49,7 +49,7 @@ function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {
         console.log('data loaded for: ' + endPoint);
         $('#rangeSelectorContainer').show();
         $('#aiRangeChart').show();
-        $('#rangeCharts').unblock();
+        $('#charts').unblock();
     });
 
     $('body').on('selectedSub', function(e) {
