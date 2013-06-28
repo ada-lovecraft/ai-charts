@@ -62,12 +62,7 @@ body {
 	text-align: right;
 }
 
-.chzn-container-multi .chzn-choices .search-choice {
-	background-image: none;
-	border-radius: 0px;
-	-webkit-border-radius:0px;
-	-moz-border-radius: 0px;
-}
+
 
 
 .blockUI {
@@ -82,10 +77,13 @@ body {
 }
 
 .blockElement {
-	margin-top: 30px;
 	background-color: white;
 }
 
+.blockMsg {
+	top: 55%;
+	left:42%;
+}
 
 /******************
 Legend
