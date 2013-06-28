@@ -24,7 +24,7 @@ requirejs.config({
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','jquery.blockUI','bootstrap.min'],
+requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','jquery-ui','jquery.blockUI','bootstrap.min'],
 function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {   
 
     $.blockUI.defaults.css = {};

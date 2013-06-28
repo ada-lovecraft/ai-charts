@@ -4,7 +4,10 @@ Pie Chart
 define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/config','mustache','dx.chartjs.debug'], function(dataUtils,color,trendData,config,Mustache) {
    var self = this;
    this.subList = config.defaults.subs || [];
-   self.selectedSubEvent = jQuery.Event('selectedSub');
+   this.selectedSubEvent = jQuery.Event('selectedSub');
+
+   this.legendTemplate = '<li ><div class="{{color}}"></div>{{name}}</li>';
+   this.hoveredPoint = null;
    
    this.triggerSelectedSubs = function(selectedSubList) {
       var subs =  [].concat(config.defaults.subs);
@@ -13,6 +16,44 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
       });
       this.subList = subs;
       $('body').trigger(jQuery.Event('selectedSub'));
+   }
+
+   this.showTooltip = function($el,endPoint) {
+      var clickedPoint = self.hoveredPoint;
+      var date = new Date(clickedPoint.argument);
+      var titleTemplate = '{{month}} {{year}} - {{type}}';
+      var contentTemplate = '<table class="table table-condensed"><thead>{{#highlight}}<th>{{value}}</th><th class="text-right">{{sub}}</th>{{/highlight}}</thead><tbody>{{#points}}<tr><td>{{value}}</td><td class="text-right">{{sub}}</td></tr>{{/points}}</tbody></table>';
+      var points = null;
+      
+
+      var $tooltip = $('#tooltipShiv');
+      $tooltip.show();
+
+      $tooltip.attr('style','background-color:' + color.rgbToHex(color.getSubColor(clickedPoint.series.tag.sub)));
+      $tooltip.offset({top: ($el.position().top + clickedPoint.y) - $tooltip.height() + config.tooltipShivMargin.y , left: $el.position().left + clickedPoint.x + config.tooltipShivMargin.x});
+      
+
+      if(clickedPoint.series.tag.type == "Plan")
+         points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument,endPoint), clickedPoint.series.tag.sub,self.subList);
+      else
+         points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument,endPoint), clickedPoint.series.tag.sub, self.subList);
+
+      $tooltip.popover({
+         placement: 'top',
+         title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear(), type: clickedPoint.series.tag.type}),
+         html: true,
+         content: Mustache.render(contentTemplate, {highlight: points.shift(), points: points}),
+         animation: false
+      });
+
+      $tooltip.click(function(e) {
+         $tooltip.hide();
+         $tooltip.popover('destroy');
+      });
+      
+      $tooltip.popover('show');
+
+      $('body').find('.popover-title').attr('style','background-color:' + color.rgbToString(color.getSubColor(clickedPoint.series.tag.sub)));         
    }
 
    return {
@@ -50,9 +91,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             var name = dataUtils.getSubNameByAbbrev($option.val());
             $el.parent().find('li.search-choice').each(function(choice) {
                var $choice = $(this);
-               console.log(name);
                if ($choice.text() == name) {
-                  console.log('match Found');
                   $choice.attr('style','background-color: ' + newColor);
                }
             });
@@ -65,11 +104,32 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
       },
       show: function($el,endPoint) {
          //define series from trendData
+         var $legend = $('#trendLegend');
+         var $planList = $legend.find('.plan ul');
+         var $actualList = $legend.find('.actual ul');
+         $planList.text('');
+         $actualList.text('');
+
          var shownSubs = self.subList;
          var series = [];
          var data = trendData.getDataForEndPoint(endPoint);
+         var $tooltip = $('#tooltipShiv');
+         var $point = $('#pointShiv');
 
-         for(var sub in data.plan.subs) {
+
+         $el.click(function() {
+            $tooltip.popover('destroy');
+            $tooltip.hide();
+         });
+
+         var keys =[];
+         for (var key in data.plan.subs) {
+            keys.push(key);
+         }
+         
+         keys.sort();
+
+         keys.forEach(function(sub) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
                series.push({
@@ -91,10 +151,16 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                      visible: false
                   }
                });
+               $planList.append(Mustache.render(self.legendTemplate,{color: thisColor.className, name: data.plan.subs[sub]}));
             }
-         } 
+         }); 
 
-         for(var sub in data.actual.subs) {
+         keys = [];
+         for (var key in data.actual.subs) {
+            keys.push(key);
+         }
+         keys.sort();
+         keys.forEach(function(sub) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
                var seriesObj = {};
@@ -113,15 +179,20 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   },
                   color: color.rgbToString(thisColor)
                });
+
+               $actualList.append(Mustache.render(self.legendTemplate,{color: thisColor.className,name: data.actual.subs[sub]}));
             }
-         } 
+         });
 
 
          //define the area chart
          $el.dxChart({
             size: {
-               width: 730,
-               height: 400
+               width: 685,
+               height: 275
+            },
+            margin: {
+               left: 7
             },
             commonAxisSettings: {
                label: {
@@ -176,66 +247,49 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             //define our series data
             series: series,
             legend: {
-               backgroundColor: 'rgba(0,0,0,0)',
-               verticalAlignment: 'bottom',
-               horizontalAlignment: 'center',
-               margin: 0,
-               customizeText: function() {
-                  return this.seriesName.replace(/ \- /, '\n');
-               },
-               font: {
-                  family: 'Roboto',
-                  weight: 300
-               }
+               visible: false
             },
             tooltip: {
                enabled: false
             },
-            pointHover: function(clickedPoint) {
+            pointHover: function(hoveredPoint) {
+               self.hoveredPoint = hoveredPoint
+               console.log('hover hp',hoveredPoint);
 
-               var date = new Date(clickedPoint.argument);
-               var titleTemplate = '{{month}} {{year}} - {{type}}';
-               var contentTemplate = '<table class="table table-condensed"><thead>{{#highlight}}<th>{{value}}</th><th class="text-right">{{sub}}</th>{{/highlight}}</thead><tbody>{{#points}}<tr><td>{{value}}</td><td class="text-right">{{sub}}</td></tr>{{/points}}</tbody></table>';
-               var points = null;
-               
+               $point.show();
 
-               var $tooltip = $('#tooltipShiv');
-               $tooltip.show();
+               $point.attr('style','background-color:' + color.rgbToHex(color.getSubColor(hoveredPoint.series.tag.sub)));
+               $point.offset({top: ($el.position().top + hoveredPoint.y) - $point.height() + config.tooltipShivMargin.y , left: $el.position().left + hoveredPoint.x + config.tooltipShivMargin.x});
+               var hp = hoveredPoint;
+               $point.click(function(e) {
+                  e.preventDefault();
+                  $('#tooltipShiv').popover('destroy');
+                  $point.attr('style', 'left: -10px');
+                  console.log('click hp', hoveredPoint);
+                  self.showTooltip($el,endPoint);
+               });
 
-               $tooltip.attr('style','background-color:' + color.rgbToHex(color.getSubColor(clickedPoint.series.tag.sub)));
-               $tooltip.offset({top: ($el.position().top + clickedPoint.y) - $tooltip.height() + config.tooltipShivMargin.y , left: $el.position().left + clickedPoint.x + config.tooltipShivMargin.x});
-               
-               $tooltip.mouseout(function() {
-                  $tooltip.popover('destroy');
-                  $tooltip.hide();
+               $point.mouseout(function() {
+                  $point.hide();
                });
 
 
-               $tooltip.mouseleave(function() {
-                  $tooltip.popover('destroy');
-                  $tooltip.hide();
+               $point.mouseleave(function() {
+                  $point.hide();
                });
 
-               
-               if(clickedPoint.series.tag.type == "Plan")
-                  points = dataUtils.translatePointsForTooltip(dataUtils.getPlanSeriesDataByDate(clickedPoint.argument,endPoint), clickedPoint.series.tag.sub,self.subList);
-               else
-                  points = dataUtils.translatePointsForTooltip(dataUtils.getActualSeriesDataByDate(clickedPoint.argument,endPoint), clickedPoint.series.tag.sub, self.subList);
-
-               $tooltip.popover({
-                  placement: 'top',
-                  title: Mustache.render(titleTemplate,{month: dataUtils.getMonthNameByDate(date), year: date.getFullYear(), type: clickedPoint.series.tag.type}),
-                  html: true,
-                  content: Mustache.render(contentTemplate, {highlight: points.shift(), points: points}),
-                  animation: false
-               });
-               
-               $tooltip.popover('show');
-
-               $('body').find('.popover-title').attr('style','background-color:' + color.rgbToString(color.getSubColor(clickedPoint.series.tag.sub)));
-               
-            }
+            }, 
+            done: function() {
+               /*
+               $('#trendLegend').position({
+                  my: 'right top',
+                  at: 'right-40 top+135',
+                  of: $('#aiRangeChart')
+               }).fadeIn();
+               */
+            },
          });
       }
    }
 });
+

@@ -20,15 +20,15 @@ define(function() {
 
 	this.palette = {
 		text: {
-			lightGray:{r: 204, g: 204, b:204 },
-			darkGray:{r:66, g:66, b:66}
+			lightGray:{r: 204, g: 204, b:204, className: 'lightGray' },
+			darkGray:{r:66, g:66, b:66, className: 'darkGray'}
 		},
 		ui: {
-			green: {r:55, g:178, b:14},
-			orange: { r:255,g:153,b:0},
-			red: { r: 228, g: 11, b:11 },
-			black: { r:0, g:0,b: 0},
-			blue: {r: 0,g:159,b:218}
+			green: {r:55, g:178, b:14, className: 'green'},
+			orange: { r:255,g:153,b:0, className: 'orange'},
+			red: { r: 228, g: 11, b:11, className: 'red' },
+			black: { r:0, g:0,b: 0, className:'black'},
+			blue: {r: 0,g:159,b:218, className: 'blue'}
 		}
 	};
 
