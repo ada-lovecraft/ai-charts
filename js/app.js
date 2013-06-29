@@ -40,13 +40,10 @@ function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {
     Register Global Event Listeners
     ***************************************/
 
-    $('body').on('loadingTrendData:'+endPoint, function(e) {
-        console.log('loading data for: ' + endPoint);
-        
+    $('body').on('loadingTrendData:'+endPoint, function(e) {        
     });
 
     $('body').on('loadedTrendData:'+endPoint, function(e) {
-        console.log('data loaded for: ' + endPoint);
         $('#rangeSelectorContainer').show();
         $('#aiRangeChart').show();
         $('#charts').unblock();

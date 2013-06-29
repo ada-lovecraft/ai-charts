@@ -6,7 +6,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    this.subList = config.defaults.subs || [];
    this.selectedSubEvent = jQuery.Event('selectedSub');
 
-   this.legendTemplate = '<li ><div class="{{color}}"></div>{{name}}</li>';
+   this.legendTemplate = '<li><div class="{{color}}"></div>{{name}}</li>';
    this.hoveredPoint = null;
    
    this.triggerSelectedSubs = function(selectedSubList) {
@@ -123,14 +123,30 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             $tooltip.hide();
          });
 
-         var keys =[];
+         var keys = [];
+         var planSubs = [];
+         var actualSubs = [];
+
          for (var key in data.plan.subs) {
             keys.push(key);
          }
-         
-         keys.sort();
+         planSubs = keys;
+         actualSubs = actualSubs.concat(planSubs);
 
-         keys.forEach(function(sub) {
+         keys = [];
+         for (var key in data.actual.subs) {
+            keys.push(key);
+         }
+         keys.forEach(function(el) {
+            if (actualSubs.indexOf(el) == -1) {
+               actualSubs.push(el);
+            }
+         });
+         
+
+         actualSubs.reverse();
+         planSubs.reverse();
+         planSubs.forEach(function(sub) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
                series.push({
@@ -156,12 +172,12 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
             }
          }); 
 
-         keys = [];
-         for (var key in data.actual.subs) {
-            keys.push(key);
-         }
-         keys.sort();
-         keys.forEach(function(sub) {
+         
+
+
+
+         
+         actualSubs.forEach(function(sub) {
             if (shownSubs.indexOf(sub) !== -1 ) {
                var thisColor = color.getSubColor(sub);
                var seriesObj = {};
@@ -257,11 +273,8 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                enabled: false
             },
             pointHover: function(hoveredPoint) {
-               self.hoveredPoint = hoveredPoint
-               console.log('hover hp',hoveredPoint);
-
+               self.hoveredPoint = hoveredPoint;
                $point.show();
-
                $point.attr('style','background-color:' + color.rgbToHex(color.getSubColor(hoveredPoint.series.tag.sub)));
                $point.offset({top: ($el.position().top + hoveredPoint.y) - $point.height() + config.tooltipShivMargin.y , left: $el.position().left + hoveredPoint.x + config.tooltipShivMargin.x});
                var hp = hoveredPoint;
@@ -269,7 +282,6 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   e.preventDefault();
                   $('#tooltipShiv').popover('destroy');
                   $point.attr('style', 'left: -10px');
-                  console.log('click hp', hoveredPoint);
                   self.showTooltip($el,endPoint);
                });
 

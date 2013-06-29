@@ -88,6 +88,10 @@ body {
 /******************
 Legend
 *******************/
+.chartLegend ul {
+	margin-bottom: -5px;
+	font-size: x-small;
+}
 
 .chartLegend ul div {
 	-webkit-mask-box-image: url(../images/legend-actual.png);

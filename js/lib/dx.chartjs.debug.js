@@ -25293,7 +25293,7 @@ DevExpress.social = {};
         var calculateRangeContainerCanvas = function(size, margin, sliderMarkerSpacing, sliderMarkerOptions) {
                 var canvas = {};
                 if(sliderMarkerOptions.position =='outside') {
-                    console.log('markers on the outside');
+                    //console.log('markers on the outside');
                     canvas = {
                         left: margin.left + sliderMarkerSpacing.left,
                         top: margin.top + sliderMarkerSpacing.top,
@@ -25301,7 +25301,7 @@ DevExpress.social = {};
                         height: size.height - margin.top - margin.bottom - sliderMarkerSpacing.top - sliderMarkerSpacing.bottom
                     };
                 } else if( sliderMarkerOptions.position == 'inside') {
-                    console.log('markers on the inside');
+                    //console.log('markers on the inside');
                     canvas = {
                         left: margin.left,
                         top: margin.top,
