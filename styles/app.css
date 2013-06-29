@@ -145,4 +145,6 @@ Legend
 	/*position: absolute;*/
 	font-size: 12px;
 	line-height: 10px;
+	text-align: right;
+	z-index: -10;
 }

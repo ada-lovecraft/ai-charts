@@ -7,6 +7,8 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 		show: function($rangeEl,endPoint) {
 			var series = [];
 			var data = trendData.getDataForEndPoint(endPoint);
+			var dateRange = dataUtils.getDateRangeForTrendByEndPoint(endPoint);
+
 			config.defaults.subs.forEach(function(sub) {
 				series.push({
 			       	  data: data.actual.series,
@@ -18,10 +20,12 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 		           	  data: data.plan.series,
 		           	  type: 'splinearea',
 		              valueField: sub,
-		              color: color.rgbaToString(color.getSubColor(sub),.2)
+		              color: color.rgbaToString(color.getSubColor(sub),config.areaAlpha)
 		           }
 				);
 			});
+
+
 
 			$("#rangeSelectorContainer").dxRangeSelector({
 				behavior: {
@@ -53,8 +57,8 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 		            adjustOnZoom: false
     			},
    	 			scale: {
-        			startValue: new Date(data.actual.series[0].dateObj),
-        			endValue: new Date(data.actual.series[data.actual.series.length-1].dateObj),
+        			startValue: dateRange.start,
+        			endValue: dateRange.end,
         			marker: {
         				visible: false
         			},

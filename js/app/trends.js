@@ -87,7 +87,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          $el.trigger("liszt:updated");
          $el.find('option:selected').each(function(el) {
             var $option = $(this);
-            var newColor = color.rgbaToString(color.getSubColor($option.val()),.2);
+            var newColor = color.rgbaToString(color.getSubColor($option.val()),config.areaAlpha);
             var name = dataUtils.getSubNameByAbbrev($option.val());
             $el.parent().find('li.search-choice').each(function(choice) {
                var $choice = $(this);
@@ -113,6 +113,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
          var shownSubs = self.subList;
          var series = [];
          var data = trendData.getDataForEndPoint(endPoint);
+         var dateRange = dataUtils.getDateRangeForTrendByEndPoint(endPoint);
          var $tooltip = $('#tooltipShiv');
          var $point = $('#pointShiv');
 
@@ -141,7 +142,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                      type: 'Plan',
                      color: thisColor
                   },
-                  color: color.rgbaToString(thisColor,.2),
+                  color: color.rgbaToString(thisColor,config.areaAlpha),
                   data: data.plan.series, 
                   type: 'splinearea', 
                   border:{
@@ -151,7 +152,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                      visible: false
                   }
                });
-               $planList.append(Mustache.render(self.legendTemplate,{color: thisColor.className, name: data.plan.subs[sub]}));
+               $planList.append(Mustache.render(self.legendTemplate,{color: thisColor.className, name: data.plan.subs[sub].match(/\w+/)[0]}));
             }
          }); 
 
@@ -180,19 +181,20 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                   color: color.rgbToString(thisColor)
                });
 
-               $actualList.append(Mustache.render(self.legendTemplate,{color: thisColor.className,name: data.actual.subs[sub]}));
+               $actualList.append(Mustache.render(self.legendTemplate,{color: thisColor.className,name: data.actual.subs[sub].match(/\w+/)[0]}));
             }
          });
 
 
          //define the area chart
-         $el.dxChart({
+         window.trendChart = $el.dxChart({
             size: {
                width: 685,
                height: 275
             },
             margin: {
-               left: 7
+               left: 7,
+               right: 4
             },
             commonAxisSettings: {
                label: {
@@ -216,6 +218,7 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                //setup default series options
                argumentField: 'dateObj',
                type: 'line',
+               hoverMode: 'none',
                border: {
                   color: color.rgbToString(color.getTextColor('darkGray')),
                   width: 2,
@@ -227,12 +230,13 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
                }
             },
             argumentAxis: {
-               type: 'datetime',
                label: {
                   customizeText: function() {
                      return dataUtils.getMonthShortNameByDate(this.value);
                   }
-               }
+               }, 
+               axisDivisionFactor: 30,
+               valueMarginsEnabled: false
             },
             valueAxis: {
                label: {
@@ -280,13 +284,11 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 
             }, 
             done: function() {
-               /*
                $('#trendLegend').position({
                   my: 'right top',
-                  at: 'right-40 top+135',
+                  at: 'right-50 top+10',
                   of: $('#aiRangeChart')
                }).fadeIn();
-               */
             },
          });
       }

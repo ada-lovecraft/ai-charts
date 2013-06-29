@@ -10,6 +10,7 @@ define(function() {
 			x: -5,
 			y: 5
 		},
+		areaAlpha: .5,
 		endPoints: {
 			accountsReceivableTrend: {
 				local: 'http://localhost:3000/ai/js/fixtures/api.js',

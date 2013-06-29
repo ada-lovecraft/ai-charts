@@ -23,6 +23,31 @@ define(['fixtures/constants', 'fixtures/trendData'], function(constants,trendDat
 			});
 			return data;
 		},
+		getDateRangeForTrendByEndPoint: function(endPoint) {
+			var tData = trendData.getDataForEndPoint(endPoint);
+			console.log('tdata:',tData);
+			console.log('actual start',tData.actual.series[0].dateObj);
+			console.log('actual end',tData.actual.series[tData.actual.series.length -1].dateObj);
+			console.log('plan start',tData.plan.series[0].dateObj);
+			console.log('plan end',tData.plan.series[tData.plan.series.length -1].dateObj);
+			
+			var startDate = tData.actual.series[0].dateObj;
+			var endDate = tData.actual.series[tData.actual.series.length -1].dateObj;
+			
+			if(tData.plan.series[0].dateObj < startDate) {
+				console.log('startdate is plan')
+				startDate = tData.plan.series[0].date;
+			}
+			if(tData.plan.series[tData.plan.series.length-1].dateObj > endDate) {
+				console.log('enddate is plan');
+				endDate = tData.plan.series[tData.plan.series.length-1].dateObj;
+			}
+
+			console.log('startDate', startDate);
+			console.log('endDate', endDate);
+
+			return {start: startDate, end: endDate}
+		},
 		getSubNameByAbbrev: function(sub) {
 			var subs = trendData.getSubList();
 			return subs[sub];

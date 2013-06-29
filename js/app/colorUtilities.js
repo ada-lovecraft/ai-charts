@@ -20,7 +20,7 @@ define(function() {
 
 	this.palette = {
 		text: {
-			lightGray:{r: 204, g: 204, b:204, className: 'lightGray' },
+			lightGray:{r: 153, g: 153, b:153, className: 'lightGray' },
 			darkGray:{r:66, g:66, b:66, className: 'darkGray'}
 		},
 		ui: {

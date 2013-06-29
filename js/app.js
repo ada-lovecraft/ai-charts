@@ -61,8 +61,6 @@ function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {
     trends.show($('#aiRangeChart'),endPoint);
     range.show($('#aiRangeChart'));
    
-
-    
 });
 
 
