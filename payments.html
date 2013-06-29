@@ -39,6 +39,7 @@
 
   <body>
 
+    <!--
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -51,24 +52,40 @@
         </div>
       </div>
     </div>
+  -->
 
     <div class="container">
 
-      <div id="charts" class="span10" data-endpoint='payments'>
-       <div>
-          <select id="subSelector" data-placeholder="Select subs..."  multiple class="chzn-select"></select>
-        </div>
+      <div id="charts" class="span8" data-endpoint='payments'>
+        <select id="subSelector" data-placeholder="Select subs..."  multiple></select>
           
-        <div id="rangeCharts" style="height:500px; max-width:700px; margin: 0 auto;">
-           <div id="rangeSelectorContainer" style="max-height:150px;max-width:800px;margin: 0px auto"></div>
-            <div id="aiRangeChart" style="height:400px; max-width: 800px;"></div>
+        <div id="rangeCharts">
+          <div id="rangeSelectorContainer" class="hide" style="min-height:1px; max-width: 730px"></div>
+            <div id="aiRangeChart" class="hide" style="min-height:1px; max-width: 730px">
+          </div>
+          <div id="trendLegend" class="chartLegend span7 muted">
+            <div class="plan">
+              <ul class="inline"></ul>
+            </div>
+            <div class="actual">
+              <ul class="inline"></ul>
+            </div>
+          </div>
         </div>
       </div>
+
+      
+
+      <div id="drivers" class="span10" data-endpoint='accountsReceivable'>
+      </div>
+      
     </div> <!-- /container -->
+
 
     <div id="tooltipShiv">
     </div>
-
+    <div id="pointShiv">
+    </div>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
