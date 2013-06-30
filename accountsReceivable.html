@@ -57,7 +57,12 @@
     <div class="container">
 
       <div id="charts" class="span8" data-endpoint='accountsReceivable'>
-        <select id="subSelector" data-placeholder="Select subs..."  multiple></select>
+        
+        <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#subSelector">
+        Contractors
+        </button>
+        <div id="subSelector" class="collapse">
+        </div>
           
         <div id="rangeCharts">
           <div id="rangeSelectorContainer" class="hide" style="min-height:1px; max-width: 730px"></div>

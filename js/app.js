@@ -15,6 +15,7 @@ requirejs.config({
     },
     shim: {
     	"jquery-ui": ['jquery'],
+        "jquery-ui.custom": ['jquery'],
     	"jquery.nouislider.min":['jquery'],
         "chosen.jquery.min":['jquery'],
         'jquery.blockUI':['jquery']
@@ -24,8 +25,12 @@ requirejs.config({
 /**************************
 Require Libs
 ***************************/
-requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','jquery-ui','jquery.blockUI','bootstrap.min'],
+requirejs(['jquery','knockout','mustache','globalize','app/trends','app/range','app/config','jquery-ui.custom','jquery.blockUI','bootstrap.min'],
 function ($,ko,Mustache,globalize,trends,range,dataUtils,config) {   
+
+    
+
+
 
     $.blockUI.defaults.css = {};
     $.blockUI.defaults.overlayCSS = {};

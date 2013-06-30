@@ -34,7 +34,10 @@ body {
 }
 
 #subSelector {
-	width: 730px;
+}
+
+#subSelector button {
+	margin-bottom: 10px;
 }
 
 #rangeCharts {

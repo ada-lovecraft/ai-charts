@@ -12,7 +12,8 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    this.triggerSelectedSubs = function(selectedSubList) {
       var subs =  [].concat(config.defaults.subs);
       selectedSubList.each(function() {
-         subs.push(this.value);
+         console.log($(this).data('code'));
+         subs.push($(this).data('code'));
       });
       this.subList = subs;
       $('body').trigger(jQuery.Event('selectedSub'));
@@ -59,47 +60,46 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
    return {
 
       populateSubSelector: function($el,endPoint) {
-         var optionTemplate = '{{#selectedSubs}}<option selected value="{{code}}">{{name}}</option>{{/selectedSubs}}{{#subs}}<option value="{{code}}">{{name}}</option>{{/subs}}';
+
+         var optionTemplate = '{{#subs}}<button class="btn {{statusClass}} span2" data-toggle="button" data-code="{{code}}">{{name}}</button>{{/subs}}';
          var subs = [];
          var selectedSubs = [];
          var data = trendData.getDataForEndPoint(endPoint);
 
 
          for(sub in data.actual.subs) {
+            var subObj = {code: sub, name: data.actual.subs[sub],statusClass: ''};
             if(config.defaults.subs.indexOf(sub) == -1) {
-               var subObj = {code: sub, name: data.actual.subs[sub]};
-               if (config.preSelectedSubs.indexOf(sub) != -1)
-                  selectedSubs.push(subObj);
-               else
-                  subs.push(subObj);
+               console.log(subObj.code,'not default');
+               if (config.preSelectedSubs.indexOf(sub) != -1) {
+                  console.log(subObj.code,'preselected');
+                  subObj.statusClass = 'active selected';  
+               }
+               subs.push(subObj);
             }
          }
 
          var keys = [];
-         selectedSubs.forEach(function(el) {
+         subs.forEach(function(el) {
             keys.push(el.code);
          });
 
 
 
          self.subList = self.subList.concat(keys);
-         $el.append(Mustache.render(optionTemplate,{selectedSubs: selectedSubs, subs: subs}));
-         $el.trigger("liszt:updated");
-         $el.find('option:selected').each(function(el) {
-            var $option = $(this);
-            var newColor = color.rgbaToString(color.getSubColor($option.val()),config.areaAlpha);
-            var name = dataUtils.getSubNameByAbbrev($option.val());
-            $el.parent().find('li.search-choice').each(function(choice) {
-               var $choice = $(this);
-               if ($choice.text() == name) {
-                  $choice.attr('style','background-color: ' + newColor);
-               }
-            });
-         });
+         $el.append(Mustache.render(optionTemplate,{subs: subs}));
+         console.log($el.find('.btn'));
 
-         $el.change(function() {
-            self.triggerSelectedSubs($el.find(':selected'));
+         //$el.find('.btn').button();
+
+         
+         
+         $el.find('button').click(function(e) {
+            $(this).toggleClass('selected');
+            console.log($el.find('.active'));
+            self.triggerSelectedSubs($el.find('.selected'));
          });
+         
          
       },
       show: function($el,endPoint) {
@@ -296,11 +296,13 @@ define(['app/dataUtilities','app/colorUtilities','fixtures/trendData','app/confi
 
             }, 
             done: function() {
+               
                $('#trendLegend').position({
                   my: 'right top',
                   at: 'right-50 top+10',
                   of: $('#aiRangeChart')
                }).fadeIn();
+               
             },
          });
       }
